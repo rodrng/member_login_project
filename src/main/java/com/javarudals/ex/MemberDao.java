@@ -12,7 +12,7 @@ public class MemberDao {
 	static String driverName = "com.mysql.jdbc.Driver";
 	static String url = "jdbc:mysql://localhost:3306/memberdb";
 	static String user = "root";
-	static String password = "kjs1111";
+	static String password = "123qwe";
 	
 	
 	private static MemberDao instance = new MemberDao();//싱글턴 패턴
