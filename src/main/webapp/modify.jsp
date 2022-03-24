@@ -24,7 +24,7 @@
 		아이디 : <%= dto.getId() %><br><br>
 		비밀번호 : <input type="password" name="pw" size="20"><br><br>
 		비밀번호 확인 : <input type="password" name="pw_check" size="20"><br><br>
-		이름 : <%= dto.getName() %><br><br>
+		이름 : <input type="text" name="name" size="20" value="<%= dto.getName() %>" readonly><br><br>
 		이메일 : <input type="text" name="eMail" size="20" value="<%= dto.geteMail() %>"><br><br>
 		주소 : <input type="text" name="address" size="50" value="<%= dto.getAddress() %>"><br><br>
 		<hr>

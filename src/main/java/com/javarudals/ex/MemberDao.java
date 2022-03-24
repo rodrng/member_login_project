@@ -98,6 +98,21 @@ public class MemberDao {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try{
+				if(set != null){					
+					set.close();
+				}
+				if(pstmt != null){					
+					pstmt.close();
+				}
+				if(connection != null){					
+					connection.close();
+				}
+			} catch(Exception e2) {
+				e2.printStackTrace();
+			}
+			
 		}
 		
 		return flag;
@@ -133,6 +148,21 @@ public class MemberDao {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try{
+				if(set != null){					
+					set.close();
+				}				
+				if(pstmt != null){					
+					pstmt.close();
+				}
+				if(connection != null){					
+					connection.close();
+				}
+			} catch(Exception e2) {
+				e2.printStackTrace();
+			}
+			
 		}
 		
 		return flag;
@@ -156,18 +186,85 @@ public class MemberDao {
 			if(set.next()) {//조건이 참이면 DB에 이미 똑같은 아이디 있음
 				dto = new MemberDto();
 				dto.setId(set.getString("id"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
-				dto.setPw(set.getString("pw"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
-				dto.setName(set.getString("name"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
-				dto.seteMail(set.getString("eMail"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
-				dto.setAddress(set.getString("address"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
+				dto.setPw(set.getString("pw"));//DB에서 불러온 해당 id의 데이터 중 pw 값 불러오기
+				dto.setName(set.getString("name"));//DB에서 불러온 해당 id의 데이터 중 name 값 불러오기
+				dto.seteMail(set.getString("eMail"));//DB에서 불러온 해당 id의 데이터 중 email 값 불러오기
+				dto.setAddress(set.getString("address"));//DB에서 불러온 해당 id의 데이터 중 address 값 불러오기
 				
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try{
+				if(set != null){					
+					set.close();
+				}
+				if(pstmt != null){					
+					pstmt.close();
+				}
+				if(connection != null){					
+					connection.close();
+				}
+			} catch(Exception e2) {
+				e2.printStackTrace();
+			}
+			
 		}
 		
 		return dto;
 	}
+	
+	public int modifyMember(MemberDto dto) {
+		int flag = 0;
+		
+		String m_id = dto.getId();
+		String m_pw = dto.getPw();
+		String m_name = dto.getName();
+		String m_eMail = dto.geteMail();
+		String m_address = dto.getAddress();
+		
+		System.out.println(m_id);
+		System.out.println(m_pw);
+		System.out.println(m_name);
+		System.out.println(m_eMail);
+		System.out.println(m_address);
+		
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+//		String query = "update members set pw='m_pw', name='m_name', eMail='m_eMail', address='m_address' where id='m_id'";
+		String query = "update members set pw=?, name=?, eMail=?, address=? where id=?";
+		try {
+			Class.forName(driverName);
+			connection = DriverManager.getConnection(url, user, password);
+			pstmt = connection.prepareStatement(query);//sql을 실행시켜주는 객체 생성(Statement)
+			
+			pstmt.setString(1, dto.getPw());
+			pstmt.setString(2, dto.getName());
+			pstmt.setString(3, dto.geteMail());
+			pstmt.setString(4, dto.getAddress());
+			pstmt.setString(5, dto.getId());
+			
+			flag = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try{
+				if(pstmt != null){					
+					pstmt.close();
+				}
+				if(connection != null){					
+					connection.close();
+				}
+			} catch(Exception e2) {
+				e2.printStackTrace();
+			}
+			
+		}
+		
+		return flag;
+	}
+	
 	
 }
