@@ -12,7 +12,7 @@ public class MemberDao {
 	static String driverName = "com.mysql.jdbc.Driver";
 	static String url = "jdbc:mysql://localhost:3306/memberdb";
 	static String user = "root";
-	static String password = "123qwe";
+	static String password = "kjs1111";
 	
 	
 	private static MemberDao instance = new MemberDao();//싱글턴 패턴
@@ -94,6 +94,41 @@ public class MemberDao {
 				flag = 1;
 			} else {
 				flag = 0;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
+	}
+	
+	public int userCheck(String id, String pw) {
+		int flag = 0;
+		
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		ResultSet set = null;
+		String query = "select pw from members where id = ?";
+		
+		try {
+			Class.forName(driverName);
+			connection = DriverManager.getConnection(url, user, password);
+			pstmt = connection.prepareStatement(query);//sql을 실행시켜주는 객체 생성(Statement)
+			pstmt.setString(1, id);
+			set = pstmt.executeQuery();
+			
+			if(set.next()) {//조건이 참이면 DB에 이미 똑같은 아이디 있음
+				
+				String dbpw = set.getString("pw");//DB에서 가져온 해당 id의 pw값이 저장
+				if(dbpw.equals(pw)) {
+					flag = 1;//로그인 성공(아이디와 비번이 일치함)
+				} else {
+					flag = 0;//아이디는 맞으나 비번이 일치하지 않음
+				}				
+				
+			} else {
+				flag = -1;//회원 가입 사실이 없음(DB에 아이디가 없음)
 			}
 			
 		} catch (Exception e) {
