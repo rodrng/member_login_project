@@ -138,5 +138,36 @@ public class MemberDao {
 		return flag;
 	}
 		
+	public MemberDto getMemberInfo(String id) {//DB에 저장되어있는 현재 로그인되어있는 회원의 정보를 불러와서 모두 반환하는 메서드
+		
+		Connection connection = null;
+		PreparedStatement pstmt = null;
+		ResultSet set = null;		
+		String query = "select * from members where id = ?";
+		MemberDto dto = null;
+		
+		try {
+			Class.forName(driverName);
+			connection = DriverManager.getConnection(url, user, password);
+			pstmt = connection.prepareStatement(query);//sql을 실행시켜주는 객체 생성(Statement)
+			pstmt.setString(1, id);
+			set = pstmt.executeQuery();
+			
+			if(set.next()) {//조건이 참이면 DB에 이미 똑같은 아이디 있음
+				dto = new MemberDto();
+				dto.setId(set.getString("id"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
+				dto.setPw(set.getString("pw"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
+				dto.setName(set.getString("name"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
+				dto.seteMail(set.getString("eMail"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
+				dto.setAddress(set.getString("address"));//DB에서 불러온 해당 id의 데이터 중 id 값 불러오기
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 	
 }
